@@ -1,0 +1,24 @@
+import java.net.*;
+
+public class DNSClient {
+    public static void main(String[] args) throws Exception {
+        DatagramSocket socket = new DatagramSocket();
+
+        String domain = "www.example.com";
+        byte[] sendData = domain.getBytes();
+        InetAddress serverAddress = InetAddress.getByName("127.0.0.1"); // Replace with actual server IP
+        int serverPort = 9876;
+
+        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, serverAddress, serverPort);
+        socket.send(sendPacket);
+
+        byte[] receiveData = new byte[1024];
+        DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+        socket.receive(receivePacket);
+
+        String ipAddress = new String(receivePacket.getData()).trim();
+        System.out.println("IP Address for " + domain + ": " + ipAddress);
+
+        socket.close();
+    }
+}
